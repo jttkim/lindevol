@@ -1,3 +1,16 @@
+/* $Id: lndglobl.h,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: lndglobl.h,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #ifndef H_LNDGLOBL
 #define H_LNDGLOBL
 
@@ -44,7 +57,11 @@ double leanover_penalty;       /* probability of dying per unit of cell imbalanc
 long seedprod_threshold;       /* min. number of cells required for a plant */
                                /* to be able to reproduce */
 long nutrient_init;            /* initial amount of nutrient in the world */
+long nutrient_per_timestep;    /* newly generated nutrients per time step */
+  
 double diffusion_rate;         /* probability of nutrient unit to diffuse per time step */
+double organic_diffusion_rate; /* diffusion rate for bound organic nutrient */
+  
 double decomposition_rate;     /* probability of nutrient unit to move from organic to free state per time step */
 
 GSYS_PARAMETERS gsys_parameters;
@@ -102,6 +119,7 @@ long min_nutrient_pool, max_nutrient_pool;
 double average_nutrient_pool;
 long num_free_nutrient, num_organic_nutrient, num_biomass_nutrient;
 long num_to_epool, num_to_npool, num_from_epool, num_from_npool;
+long nutrient_loss;
 long *soil_profile_h = NULL, *soil_profile_v = NULL;
 long *organic_profile_h = NULL, *organic_profile_v = NULL;
 
@@ -165,7 +183,10 @@ extern double leanover_penalty;
 extern long seedprod_threshold;       /* min. number of cells required for a plant */
                                       /* to be able to reproduce */
 extern long nutrient_init;            /* initial amount of nutrient in the world */
+extern long nutrient_per_timestep;    /* newly generated nutrients per time step */
+
 extern double diffusion_rate;         /* probability of nutrient unit to diffuse per time step */
+extern double organic_diffusion_rate; /* diffusion rate for bound organic nutrient */
 extern double decomposition_rate;     /* probability of nutrient unit to move from organic to free state per time step */
 
 extern GSYS_PARAMETERS gsys_parameters;
@@ -223,6 +244,7 @@ extern long min_nutrient_pool, max_nutrient_pool;
 extern double average_nutrient_pool;
 extern long num_free_nutrient, num_organic_nutrient, num_biomass_nutrient;
 extern long num_to_epool, num_to_npool, num_from_epool, num_from_npool;
+extern long nutrient_loss;
 extern long *soil_profile_h, *soil_profile_v, *organic_profile_h, *organic_profile_v;
 
 extern char pro_file_name[MAX_SLEN];

@@ -1,3 +1,16 @@
+/* $Id: lndlib.h,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: lndlib.h,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #ifndef H_LNDLIB
 #define H_LNDLIB
 
@@ -32,8 +45,6 @@ extern void write_genomes(long num_samples, const long *sample_index);
 
 extern long prepare_sample(long sample_size, long *sample_index);
 
-extern unsigned long *xxx_initstate(unsigned int seed, unsigned long *arg_state);
-extern unsigned long *xxx_setstate(unsigned long *arg_state);
 extern unsigned long lnd_random(unsigned long range);
 extern double lnd_rnd(void);
 extern int write_rndgenerator_state(FILE *f);

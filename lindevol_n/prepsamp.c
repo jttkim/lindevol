@@ -1,7 +1,21 @@
+/* $Id: prepsamp.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: prepsamp.c,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #include "lndglobl.h"
 #include "lnderror.h"
 #include "lndlib.h"
 #include "lndlibin.h"
+#include "urandom.h"
 
 
 /*
@@ -25,12 +39,12 @@ long prepare_sample(long sample_size, long *sample_index)
 
   for(i = 0; i < world_width; i++)
     tmp_index[i] = i;
-  saved_state = xxx_initstate(4711, junk);
+  saved_state = ulong_initstate(4711, junk);
   for (i = 0; i < 64; i++)
     rstate[i] = saved_state[i];
-  xxx_setstate(rstate);
+  ulong_setstate(rstate);
   random_shuffle(world_width, tmp_index);
-  xxx_setstate(saved_state);
+  ulong_setstate(saved_state);
   for(i = 0; i < world_width; i++)
   {
     if (plant[tmp_index[i]])

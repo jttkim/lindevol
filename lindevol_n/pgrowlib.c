@@ -1,3 +1,16 @@
+/* $Id: pgrowlib.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: pgrowlib.c,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #include <ctype.h>
 #include <errno.h>
 #include <float.h>
@@ -311,11 +324,29 @@ void sunshine(void)
 
 void nutrient_diffusion(void)
 {
-  long x, y, xnew, ynew, r, i;
+  long x, y, xnew, ynew, r, i, new_nutrient;
 
   for (i = 0; i < world_width * (world_soil + 1); i++)
     tmp_index[i] = i;
   random_shuffle(world_width * (world_soil + 1), tmp_index);
+  for (i = 0; i < world_width * (world_soil + 1); i++)
+  {
+    x = tmp_index[i] % world_width;
+    y = tmp_index[i] / world_width;
+    if (world[x][y].organic_nutrient && (lnd_rnd() < organic_diffusion_rate))
+    {
+      r = lnd_random(8);
+      xnew = (world_width + x + x_offset[r]) % world_width;
+      ynew = y + y_offset[r];
+      if ((ynew >= 0) && (ynew <= world_soil))
+      {
+	world[x][y].organic_nutrient--;
+	world[xnew][ynew].organic_nutrient++;
+      }
+    }
+  }
+  random_shuffle(world_width * (world_soil + 1), tmp_index);
+  new_nutrient = 0;
   for (i = 0; i < world_width * (world_soil + 1); i++)
   {
     x = tmp_index[i] % world_width;
@@ -333,8 +364,18 @@ void nutrient_diffusion(void)
       if ((ynew >= 0) && (ynew <= world_soil) && !world[xnew][ynew].nutrient)
       {
         world[x][y].nutrient = 0;
-        world[xnew][ynew].nutrient = 1;
+	  world[xnew][ynew].nutrient = 1;
       }
+      else if (ynew < 0)
+      {
+	world[x][y].nutrient = 0;
+	nutrient_loss++;
+      }
+    }
+    if (!world[x][y].nutrient && (new_nutrient < nutrient_per_timestep))
+    {
+      world[x][y].nutrient = 1;
+      new_nutrient++;
     }
   }
   for (x = 0; x < world_width; x++)

@@ -1,3 +1,16 @@
+/* $Id: pro6.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: pro6.c,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -73,7 +86,9 @@ int open_pro_file(const char *mode)
     fprintf(pro_file, "DEATH_LEANOVER=%f\n", leanover_penalty);
     fprintf(pro_file, "SEED_THRESHOLD=%ld\n", seedprod_threshold);
     fprintf(pro_file, "NUTRIENT_INIT=%ld\n", nutrient_init);
+    fprintf(pro_file, "NUTRIENT_PER_TIMESTEP=%ld\n", nutrient_per_timestep);
     fprintf(pro_file, "DIFFUSION_RATE=%f\n", diffusion_rate);
+    fprintf(pro_file, "ORGANIC_DIFFUSION_RATE=%f\n", organic_diffusion_rate);
     fprintf(pro_file, "DECOMPOSITION_RATE=%f\n", decomposition_rate);
     fprintf(pro_file, "RANDOM_SEED=%ld\n", random_seed);
     fprintf(pro_file, "GSYS_CONF=d%ld f%ld l%ld -%ld +%ld et%ld nt%ld ef%ld nf%ld s%ld\n",
@@ -223,20 +238,24 @@ int open_pro_file(const char *mode)
     fprintf(pro_file, "number of from_epool\n");                     /* 059 */
     fprintf(pro_file, "n\n");
     fprintf(pro_file, "number of from_npool\n");                     /* 060 */
+    fprintf(pro_file, "n\n");
+    fprintf(pro_file, "nutrient loss\n");                            /* 061 */
+    fprintf(pro_file, "n\n");
+    fprintf(pro_file, "total nutrient\n");                           /* 062 */
     fprintf(pro_file, "d\n");
-    fprintf(pro_file, "bitcheck distribution\n");                    /* 061 */
+    fprintf(pro_file, "bitcheck distribution\n");                    /* 063 */
     fprintf(pro_file, "d\n");
-    fprintf(pro_file, "bitset distribution\n");                      /* 062 */
+    fprintf(pro_file, "bitset distribution\n");                      /* 064 */
     if (soil_savefreq > 0)
     {
       fprintf(pro_file, "d i%1ld\n", soil_savefreq);
-      fprintf(pro_file, "horizontal soil profile\n");                /* 063 */
+      fprintf(pro_file, "horizontal soil profile\n");                /* 065 */
       fprintf(pro_file, "d i%1ld\n", soil_savefreq);
-      fprintf(pro_file, "vertical soil profile\n");                  /* 064 */
+      fprintf(pro_file, "vertical soil profile\n");                  /* 066 */
       fprintf(pro_file, "d i%1ld\n", soil_savefreq);
-      fprintf(pro_file, "horizontal organic profile\n");             /* 065 */
+      fprintf(pro_file, "horizontal organic profile\n");             /* 067 */
       fprintf(pro_file, "d i%1ld\n", soil_savefreq);
-      fprintf(pro_file, "vertical organic profile\n");               /* 066 */
+      fprintf(pro_file, "vertical organic profile\n");               /* 068 */
     }
     if (ddistr_savefreq > 0)
     {
@@ -334,6 +353,8 @@ void write_pro(void)
   fprintf(pro_file, "%ld\n", num_to_npool);
   fprintf(pro_file, "%ld\n", num_from_epool);
   fprintf(pro_file, "%ld\n", num_from_npool);
+  fprintf(pro_file, "%ld\n", nutrient_loss);
+  fprintf(pro_file, "%ld\n", num_free_nutrient + num_organic_nutrient + num_biomass_nutrient);
   ch_length = world_width;
   ch_length = (ch_length > (world_soil + 1)) ? ch_length : (world_soil + 1);
   ch_length = (ch_length > NUM_STATEBITS) ? ch_length : NUM_STATEBITS;

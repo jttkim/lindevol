@@ -1,3 +1,16 @@
+/* $Id: lnd6v01.c,v 1.2 2000/01/30 03:10:59 kim Exp $ */
+/*
+ * $Log: lnd6v01.c,v $
+ * Revision 1.2  2000/01/30 03:10:59  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #include <ctype.h>
 #include <errno.h>
 #include <float.h>
@@ -87,7 +100,9 @@ int get_control_parameters(void)
   leanover_penalty = input_dbl("random death probability factor per energy unit: ");
   seedprod_threshold = input_long("threshold # of cells for seed production: ");
   nutrient_init = input_long("initial amount of nutrient in world: ");
+  nutrient_per_timestep = input_long("additional nutrient per time step: ");
   diffusion_rate = input_dbl("diffusion rate: ");
+  organic_diffusion_rate = input_dbl("organic diffusion rate: ");
   decomposition_rate = input_dbl("decomposition rate: ");
 
   gsys_parameters.num_divide = input_long("number of code bytes for divide: ");
@@ -119,14 +134,14 @@ int get_control_parameters(void)
 int get_test_parameters(void)
 {
   strcpy(simname, "test");
-  psize_init = 50;
+  psize_init = 100;
   m_replacement = 0.03;
   m_insertion = 0.01;
   m_deletion = 0.01;
   m_duplication = 0.0;
   m_factor = 1.0;
 
-  world_width = 50;
+  world_width = 100;
   world_height = 20;
   world_soil = 10;
   glen_init = 50;
@@ -135,8 +150,10 @@ int get_test_parameters(void)
   rdeath_f_numcells = 1.0;
   leanover_penalty = 0.0;
   seedprod_threshold = 1;
-  nutrient_init = 400;
+  nutrient_init = 800;
+  nutrient_per_timestep = 5;
   diffusion_rate = 1.0;
+  organic_diffusion_rate = 0.5;
   decomposition_rate = 1.0;
 
   gsys_parameters.num_divide = 32;
@@ -155,11 +172,11 @@ int get_test_parameters(void)
   dmt_savefreq = 0;
   phyltest_savefreq = 0;
   phyltest_samplesize = LONG_MAX;
-  ddistr_savefreq = 0;
   ddistr_samplesize = LONG_MAX;
   bp_ceiling = 0;
   ddistr_savefreq = 20;
-  num_generations = 1000;
+  soil_savefreq = 20;
+  num_generations = 10000;
 
   return (1);
 }
@@ -239,7 +256,9 @@ int interpret_parameter(const char *line)
   par_id_double("leanover_penalty", leanover_penalty);
   par_id_long("seedprod_threshold", seedprod_threshold);
   par_id_long("nutrient_init", nutrient_init);
+  par_id_long("nutrient_per_timestep", nutrient_per_timestep);
   par_id_double("diffusion_rate", diffusion_rate);
+  par_id_double("organic_diffusion_rate", organic_diffusion_rate);
   par_id_double("decomposition_rate", decomposition_rate);
 
   par_id_long("num_divide", gsys_parameters.num_divide);
@@ -494,6 +513,7 @@ void zero_counters(void)
   num_to_npool = 0;
   num_from_epool = 0;
   num_from_npool = 0;
+  nutrient_loss = 0;
   for (i = 0; i < NUM_STATEBITS; i++)
   {
     num_bitchecks[i] = 0;

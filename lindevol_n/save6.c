@@ -1,3 +1,16 @@
+/* $Id: save6.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/*
+ * $Log: save6.c,v $
+ * Revision 1.2  2000/01/30 03:11:00  kim
+ * Added cvs tags
+ * Switched to urandom dependent lndrandm (this should be moved to a lib)
+ * Added nutrient flux: free nutrient may diffuse out of the world and is
+ *     generated at random locations. New control parameters:
+ *     * nutrient_per_timestep
+ *     * organic_nutrient_diffusion
+ *
+ */
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,7 +121,9 @@ int write_named_savefile(const char *save_file_name)
   fprintf(f, "%ld\n", world_height);
   fprintf(f, "%ld\n", world_soil);
   fprintf(f, "%ld\n", nutrient_init);
+  fprintf(f, "%ld\n", nutrient_per_timestep);
   fprintf(f, "%1.12g\n", diffusion_rate);
+  fprintf(f, "%1.12g\n", organic_diffusion_rate);
   fprintf(f, "%1.12g\n", decomposition_rate);
   fprintf(f, "%1.12g\n", p_random_death);
   fprintf(f, "%1.12g\n", rdeath_f_energy);
@@ -222,7 +237,11 @@ int load_named_savefile(const char *save_file_name)
   fgets(buf, MAX_SLEN, f);
   nutrient_init = strtol(buf, (char **) NULL, 10);
   fgets(buf, MAX_SLEN, f);
+  nutrient_per_timestep = strtol(buf, (char **) NULL, 10);
+  fgets(buf, MAX_SLEN, f);
   diffusion_rate = strtod(buf, (char **) NULL);
+  fgets(buf, MAX_SLEN, f);
+  organic_diffusion_rate = strtod(buf, (char **) NULL);
   fgets(buf, MAX_SLEN, f);
   decomposition_rate = strtod(buf, (char **) NULL);
   fgets(buf, MAX_SLEN, f);

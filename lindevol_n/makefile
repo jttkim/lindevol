@@ -13,14 +13,14 @@ CC 	= gcc
 CCXX 	= g++
 AR	= ar -rsc
 STDLIBS	= -lXext -lX11 -lm
-OPT 	= -Wall -O6
-# OPT 	= -Wall -g
+# OPT 	= -Wall -O6
+OPT 	= -Wall -g
 # OPT	= -fullwarn -O2 -pedantic
 
 QTDIR	= /usr/local/qt
 QTLIBS	= -lqt
-QTINCLUDE = -I$(QTDIR)/include
-QTLIBDIR  = $(QTDIR)/lib
+QTINCLUDE = -I/usr/include/qt
+QTLIBDIR  = /usr/lib
 
 include objects
 
@@ -29,7 +29,7 @@ JKINCL  = -I$(HOME)/include
 
 INCLUDE = $(JKINCL) $(QTINCLUDE)
 CFLAGS 	= $(OPT) $(DBGDEF) $(DEFINE) $(INCLUDE)
-LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L$(QTLIBDIR)
+LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L/usr/X11R6/lib
 LIBS	= -llndlib $(JKLIBS) $(QTLIBS) $(STDLIBS)
 
 $(PRG) : $(OBJS) $(LNDLIBNAME)
