@@ -1,7 +1,10 @@
 /*
- * $Id: plottree.c,v 1.6 2000/02/10 19:17:40 kim Exp $
+ * $Id: plottree.c,v 1.7 2000/03/15 12:27:11 kim Exp $
  *
  * $Log: plottree.c,v $
+ * Revision 1.7  2000/03/15 12:27:11  kim
+ * -B was ignored for eps, bug fixed
+ *
  * Revision 1.6  2000/02/10 19:17:40  kim
  * Fixed offset bug in EPS generation
  *
@@ -607,6 +610,11 @@ int main(int argc, char **argv)
 	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
 	  else
 	    phyl_set_thickness(&phyltree, linewidth);
+	  if (bootstrap_thick && bootstrapfile_name)
+	  {
+	    phyl_counter2thick(&phyltree, linewidth * 10.0 / phyl_psinfo.bootstrap_numtrees);
+	    phyl_psinfo.bootstrap_numtrees = 0;
+	  }
           /* {
             PHYL_LEAFATTRIBUTE *atl = attrlist;
 
@@ -682,7 +690,6 @@ int main(int argc, char **argv)
 	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
 	  else
 	    phyl_set_thickness(&phyltree, linewidth);
-	  
 	  if (bootstrap_thick && bootstrapfile_name)
 	  {
 	    phyl_counter2thick(&phyltree, linewidth * 10.0 / phyl_psinfo.bootstrap_numtrees);
