@@ -17,21 +17,33 @@ STDLIBS	= -lXext -lX11 -lm
 OPT 	= -Wall -g
 # OPT	= -fullwarn -O2 -pedantic
 
+ifeq ($(OSTYPE), linux-gnu)
+X11LIBDIR = /usr/X11R6/lib
+else
+X11LIBDIR = /usr/lib/X11
+ifeq ($(strip, $(QTDIR)),)
 QTDIR	= /usr/local/qt
-QTLIBS	= -lqt
-# QTINCLUDE = -I/usr/include/qt
-# QTLIBDIR  = /usr/lib
-QTCINCLUDE = -I$(QTDIR)/include
+endif
+endif
+
+ifeq ($(strip, $(QTDIR)),)
+QTINCLUDE = -I/usr/include/qt
+QTLIBDIR  = /usr/lib
+else
+QTINCLUDE = -I$(QTDIR)/include
 QTLIBDIR = $(QTDIR)/lib
+endif
 
 include objects
+
+QTLIBS	= -lqt
 
 JKLIBS 	= -lgfaport -lgnlib -lptlib -lgenome -ljklib
 JKINCL  = -I$(HOME)/include
 
 INCLUDE = $(JKINCL) $(QTINCLUDE)
 CFLAGS 	= $(OPT) $(DBGDEF) $(DEFINE) $(INCLUDE)
-LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L$(QTLIBDIR) -L/usr/lib/X11
+LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L$(QTLIBDIR) -L$(X11LIBDIR)
 LIBS	= -llndlib $(JKLIBS) $(QTLIBS) $(STDLIBS)
 
 $(PRG) : $(OBJS) $(LNDLIBNAME)
