@@ -1,7 +1,10 @@
 /*
- * $Id: plottree.c,v 1.5 2000/01/28 18:07:31 kim Exp $
+ * $Id: plottree.c,v 1.6 2000/02/10 19:17:40 kim Exp $
  *
  * $Log: plottree.c,v $
+ * Revision 1.6  2000/02/10 19:17:40  kim
+ * Fixed offset bug in EPS generation
+ *
  * Revision 1.5  2000/01/28 18:07:31  kim
  * fixed divide by zero bug in thickness hack
  *
@@ -615,9 +618,9 @@ int main(int argc, char **argv)
           } */
           fprintf(outfile, "72 300 div 72 300 div scale\n");
           if (unrooted_style)
-            phyl_ps_utree(outfile, &phyltree, 200.0, 100.0, 1800.0, 1800.0, &phyl_psinfo);
+            phyl_ps_utree(outfile, &phyltree, 0.0, 0.0, 1800.0, 1800.0, &phyl_psinfo);
           else
-            phyl_pstree(outfile, &phyltree, 200.0, 100.0, 1800.0, 1000.0, &phyl_psinfo);
+            phyl_pstree(outfile, &phyltree, 0.0, 0.0, 1800.0, 1000.0, &phyl_psinfo);
           fprintf(outfile, "%%%%EOF\n");
           phyl_free_tree(&phyltree);
           fprintf(stderr, "*** EPS file can hold only one tree ***\n");
