@@ -1,6 +1,9 @@
-/* $Id: lndrandm.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/* $Id: lndrandm.c,v 1.3 2000/01/30 03:25:18 kim Exp $ */
 /*
  * $Log: lndrandm.c,v $
+ * Revision 1.3  2000/01/30 03:25:18  kim
+ * got rid of #include "lndrandm.h"
+ *
  * Revision 1.2  2000/01/30 03:11:00  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -31,7 +34,7 @@
 
 #include "jklib.h"
 #include "urandom.h"
-#include "lndrandm.h"
+#include "lndlib.h"
 
 #ifdef MEMDEBUG
 #  ifdef __atarist__
