@@ -1,0 +1,3 @@
+LIBOBJS = gfaport.o lndrandm.o lnderror.o lndio.o lnddispl.o creatarr.o pixfile.o gplot1.o urandom.o
+OBJS 	= lnd1v23.o lnd1c23.o lnd1f23.o stplot1.o
+
