@@ -1,0 +1,12 @@
+LNDLIBOBJS = creatarr.o countspc.o  \
+             prepfnam.o dmt_file.o treefile.o dst_file.o bpe_file.o \
+             gnomfile.o opnfiles.o clsfiles.o timefile.o lndrandm.o \
+             lndsignl.o pbbox.o pixfile.o \
+	     deathprb.o lnderror.o pgrowlib.o nextmutp.o prepsamp.o
+
+OBJS 	= lnddispl.o lndwidgt.o mlndwdgt.o ctrlwdgt.o mctrlwdg.o lnd6v01.o pgrow6.o \
+	  pro6.o prccell6.o geneact6.o save6.o \
+	  mutate6.o
+
+STPLOTOBJS = stplot6.o gplot6.o save6.o geneact6.o prccell6.o
+
