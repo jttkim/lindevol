@@ -1,0 +1,95 @@
+# Makefile for the LindEvol program
+
+LIBPREFIX  = lib
+LIBPOSTFIX = .a
+
+PRG 	= lnd3new
+PRGS	= $(PRG) genomeview readtree cmptree rndtrdst jfdiff plottree plotcons xmsf counttrs treechk rtrchk
+LNDLIB	= lndlib
+LNDLIBNAME = $(LIBPREFIX)$(LNDLIB)$(LIBPOSTFIX)
+CC 	= gcc
+AR	= ar -rsc
+STDLIBS	= -lm -lmalloc
+OPT 	= -Wall -g
+
+LNDLIBOBJS = creatarr.o cleararr.o hexval.o   chrtohex.o hextochr.o \
+             comphist.o shannon.o  statstcs.o countspc.o genalloc.o \
+             prepfnam.o pro_file.o dmt_file.o treefile.o dst_file.o bpe_file.o \
+             gnomfile.o opnfiles.o clsfiles.o savefile.o editdist.o lndrandm.o \
+             prc_cell.o calc_act.o gene_act.o lndsignl.o mutate.o   \
+	     rndshufl.o writeseq.o writegnm.o readgnm.o
+
+OBJS 	= lnderror.o lnddispl.o lnd3new.o pgrow306.o pgrowlib.o
+
+JKLIBS 	= -L$(HOME)/lib -L./ -l$(LNDLIB) -lgfaport -lgnlib -lptlib
+JKINCL  = -I$(HOME)/include
+
+INCLUDE = $(JKINCL)
+CFLAGS 	= $(OPT) $(DBGDEF) $(DEFINE) $(INCLUDE)
+LIBS	= $(JKLIBS) -lmemdebug $(STDLIBS)
+
+$(PRG) : $(OBJS) $(LNDLIBNAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(PRG) $(LIBS)
+
+all : $(PRGS)
+	@echo
+	@echo '***********************************************************'
+	@echo '* All programs of the lindevol project are now up to date *'
+	@echo '***********************************************************'
+
+$(LNDLIBNAME) : $(LNDLIBOBJS)
+	rm -f $(LNDLIBNAME)
+	$(AR) $(LNDLIBNAME) $(LNDLIBOBJS)
+
+genomeview: $(LNDLIBNAME) genomeview.o lnderror.o
+	$(CC) genomeview.o lnderror.o -o genomeview $(LIBS)
+	rm -f genomedump
+	ln genomeview genomedump
+
+readtree : readtree.o
+	$(CC) readtree.o -o readtree $(LIBS)
+
+cmptree : cmptree.o
+	$(CC) cmptree.o -o cmptree $(LIBS)
+
+jfdiff: jfdiff.o
+	$(CC) jfdiff.o -o jfdiff $(LIBS)
+
+plottree: plottree.o
+	$(CC) plottree.o -o plottree $(LIBS)
+
+plotcons: plotcons.o
+	$(CC) plotcons.o -o plotcons $(LIBS)
+
+rndtrdst : rndtrdst.o
+	$(CC) rndtrdst.o -o rndtrdst $(LIBS)
+
+xmsf : xmsf.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) xmsf.o -o xmsf $(LIBS)
+
+counttrs : counttrs.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) counttrs.o -o counttrs $(LIBS)
+
+treechk : treechk.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) treechk.o -o treechk $(LIBS)
+
+rtrchk : rtrchk.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) rtrchk.o -o rtrchk $(LIBS)
+
+tree2dmt : tree2dmt.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) tree2dmt.o -o tree2dmt $(LIBS)
+
+distcorr : distcorr.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) distcorr.o -o distcorr $(LIBS)
+
+treecorr : treecorr.o $(LNDLIBNAME)
+	$(CC) $(CLFAGS) treecorr.o -o treecorr $(LIBS)
+
+clean :
+	rm -f $(PRG) $(LNDLIBOBJS) $(OBJS) $(LNDLIBNAME) mdepend
+
+mdepend :
+	$(CC) $(INCLUDE) -MM *.c > mdepend
+
+include mdepend
+

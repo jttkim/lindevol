@@ -1,0 +1,212 @@
+%!
+% prolog
+
+/FSD { findfont exch scalefont def } bind def
+/showright
+{ /lstr exch def
+lstr stringwidth pop sub
+exch moveto lstr show
+} def
+
+% end of prolog
+
+% beginning of page setup
+
+save
+72 300 div 72 300 div scale
+/scratchstr 30 string def
+
+% end of page setup, beginning of page commands
+
+gsave /Helvetica-Bold findfont 50 scalefont setfont
+200.000000 3250.000000 moveto (blah.tre, page 1) show
+3250.000000 2000.000000 (13 Dec 99) showright
+0 setlinecap 10 setlinewidth newpath 200.000000 3230.000000 moveto 2000.000000 3230.000000 lineto stroke grestore
+gsave
+/leaffont /Courier-Bold findfont 60.000000 scalefont def
+/bsfont /Courier-Bold findfont 60.000000 scalefont def
+/specfont /Courier-Oblique findfont 60.000000 scalefont def
+/familyfont /Helvetica-Bold findfont 40 scalefont def
+
+/highlightbox
+{
+  gsave
+  3.000000 setlinewidth
+  0.0 -18.000000 rmoveto 0 60.000000 rlineto dup 0.0 rlineto 0 -60.000000 rlineto neg 0 rlineto
+  gsave
+  setrgbcolor fill
+  grestore
+  stroke
+  grestore
+} bind def
+
+/specshow
+{
+  save
+  gsave
+  leaffont setfont
+  exch
+  /specname exch def
+  exch
+  /leafname exch def
+  exch
+  1 eq
+  {
+    leafname stringwidth pop
+    specname stringwidth pop
+    dup 0.0 ne
+    {
+      (\(\) ) stringwidth pop add
+    }
+    if
+    add neg
+    0.0 rmoveto
+  }
+  if
+  exch
+  dup
+  0.0 ge
+  {
+    /b exch def
+    exch /g exch def
+    exch /r exch def
+    r g b
+    leafname stringwidth pop
+    specname stringwidth pop
+    dup 0.0 ne
+    {
+      (\(\) ) stringwidth pop add
+    }
+    if
+    add
+    highlightbox
+  }
+  {
+    pop exch pop exch pop
+  }
+  ifelse
+  exch
+  dup
+  0.0 ge
+  {
+    /b exch def
+    exch /g exch def
+    exch /r exch def
+    r g b setrgbcolor
+  }
+  {
+    pop exch pop exch pop
+  }
+  ifelse
+  leaffont setfont leafname show
+  specname stringwidth pop 0.0 ne
+  {
+    specfont setfont ( \() show specname show (\)) show
+  }
+  if
+  grestore
+  restore
+} bind def
+0 setlinecap
+/Courier-Bold findfont 60.000000 scalefont setfont
+1620.000000 3140.000000 moveto (units) show
+newpath 1620.000000 3050.000000 moveto 1620.000000 226.000000 lineto stroke
+newpath 1620.000000 226.000000 moveto 1640.000000 226.000000 lineto stroke
+1640.000000 226.000000 moveto ( 0.0000) show
+newpath 1620.000000 579.000000 moveto 1640.000000 579.000000 lineto stroke
+1640.000000 579.000000 moveto ( 0.5000) show
+newpath 1620.000000 932.000000 moveto 1640.000000 932.000000 lineto stroke
+1640.000000 932.000000 moveto ( 1.0000) show
+newpath 1620.000000 1285.000000 moveto 1640.000000 1285.000000 lineto stroke
+1640.000000 1285.000000 moveto ( 1.5000) show
+newpath 1620.000000 1638.000000 moveto 1640.000000 1638.000000 lineto stroke
+1640.000000 1638.000000 moveto ( 2.0000) show
+newpath 1620.000000 1991.000000 moveto 1640.000000 1991.000000 lineto stroke
+1640.000000 1991.000000 moveto ( 2.5000) show
+newpath 1620.000000 2344.000000 moveto 1640.000000 2344.000000 lineto stroke
+1640.000000 2344.000000 moveto ( 3.0000) show
+newpath 1620.000000 2697.000000 moveto 1640.000000 2697.000000 lineto stroke
+1640.000000 2697.000000 moveto ( 3.5000) show
+newpath 1620.000000 3050.000000 moveto 1640.000000 3050.000000 lineto stroke
+1640.000000 3050.000000 moveto ( 4.0000) show
+/leaffont /Courier-Bold findfont 60.000000 scalefont def
+newpath 850.000000 226.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 226.000000 moveto 460.000000 932.000000 lineto stroke
+newpath 460.000000 932.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 932.000000 moveto 460.000000 1638.000000 lineto stroke
+newpath 460.000000 1638.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 1638.000000 moveto 460.000000 2344.000000 lineto stroke
+newpath 460.000000 2344.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 330.000000 2344.000000 moveto 330.000000 3050.000000 lineto stroke
+newpath 330.000000 3050.000000 18.000000 0 360 arc gsave fill grestore stroke
+/xpos_a 330.000000 def
+gsave 330.000000 3080.000000 moveto 90 rotate
+0.000000 0.000000 0.000000 -1.000000 -1.000000 -1.000000 0 (a) () specshow
+grestore
+0 setlinecap 1.000000 setlinewidth
+newpath 590.000000 2344.000000 moveto 590.000000 3050.000000 lineto stroke
+newpath 590.000000 3050.000000 18.000000 0 360 arc gsave fill grestore stroke
+/xpos_b 590.000000 def
+gsave 590.000000 3080.000000 moveto 90 rotate
+0.000000 0.000000 0.000000 -1.000000 -1.000000 -1.000000 0 (b) () specshow
+grestore
+0 setlinecap 1.000000 setlinewidth
+newpath 330.000000 2344.000000 moveto 590.000000 2344.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 1638.000000 moveto 460.000000 1638.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 932.000000 moveto 460.000000 932.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 980.000000 226.000000 moveto 980.000000 932.000000 lineto stroke
+newpath 980.000000 932.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 850.000000 932.000000 moveto 850.000000 1638.000000 lineto stroke
+newpath 850.000000 1638.000000 18.000000 0 360 arc gsave fill grestore stroke
+/xpos_c 850.000000 def
+gsave 850.000000 1668.000000 moveto 90 rotate
+0.000000 0.000000 0.000000 -1.000000 -1.000000 -1.000000 0 (c) () specshow
+grestore
+0 setlinecap 1.000000 setlinewidth
+newpath 1110.000000 932.000000 moveto 1110.000000 1638.000000 lineto stroke
+newpath 1110.000000 1638.000000 18.000000 0 360 arc gsave fill grestore stroke
+/xpos_d 1110.000000 def
+gsave 1110.000000 1668.000000 moveto 90 rotate
+0.000000 0.000000 0.000000 -1.000000 -1.000000 -1.000000 0 (d) () specshow
+grestore
+0 setlinecap 1.000000 setlinewidth
+newpath 850.000000 932.000000 moveto 1110.000000 932.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 1370.000000 226.000000 moveto 1370.000000 932.000000 lineto stroke
+newpath 1370.000000 932.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 1370.000000 932.000000 moveto 1370.000000 1638.000000 lineto stroke
+newpath 1370.000000 1638.000000 18.000000 0 360 arc gsave fill grestore stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 1370.000000 1638.000000 moveto 1370.000000 2344.000000 lineto stroke
+newpath 1370.000000 2344.000000 18.000000 0 360 arc gsave fill grestore stroke
+/xpos_e 1370.000000 def
+gsave 1370.000000 2374.000000 moveto 90 rotate
+0.000000 0.000000 0.000000 -1.000000 -1.000000 -1.000000 0 (e) () specshow
+grestore
+0 setlinecap 1.000000 setlinewidth
+newpath 1370.000000 1638.000000 moveto 1370.000000 1638.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 1370.000000 932.000000 moveto 1370.000000 932.000000 lineto stroke
+0 setlinecap 1.000000 setlinewidth
+newpath 460.000000 226.000000 moveto 1370.000000 226.000000 lineto stroke
+grestore
+gsave 1 0 0 setrgbcolor 100 226.000000 moveto 2000 0 rlineto stroke grestore
+save
+/Courier findfont 42.000000 scalefont setfont
+200.000000 100.000000 moveto (aus den Traeumen reisst) show
+200.000000 142.000000 moveto (der Schwipp mich) show
+200.000000 184.000000 moveto (Wenn der Knall) show
+restore
+restore showpage
+
+% end of page
+

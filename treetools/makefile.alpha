@@ -1,0 +1,84 @@
+# Makefile for the LindEvol program
+
+LIBPREFIX  = lib
+LIBPOSTFIX = .a
+
+TREETOOLS = cmptree rndtrdst jfdiff plottree plotcons xmsf \
+	    counttrs treechk rtrchk distcorr tree2dmt treecorr \
+	    treecomplex mutcheck trevstre
+
+CC 	= gcc
+AR	= ar -rsc
+STDLIBS	= -lm
+OPT 	= -Wall -O2 -fomit-frame-pointer
+
+BINDIR	= $(HOME)/bin
+
+JKLIBS 	= -L$(HOME)/lib -lgfaport -lgnlib -lptlib -lgenome -ljklib
+JKINCL  = -I$(HOME)/include
+
+INCLUDE = $(JKINCL)
+CFLAGS 	= $(OPT) $(DBGDEF) $(DEFINE) $(INCLUDE)
+LIBS	= $(JKLIBS) -lmemdebug $(STDLIBS)
+
+
+
+.PHONY : all install
+
+all : $(TREETOOLS)
+
+install : $(TREETOOLS)
+	cp $(TREETOOLS) $(BINDIR)
+
+cmptree : cmptree.o
+	$(CC) cmptree.o -o cmptree $(LIBS)
+
+jfdiff: jfdiff.o
+	$(CC) jfdiff.o -o jfdiff $(LIBS)
+
+plottree: plottree.o
+	$(CC) plottree.o -o plottree $(LIBS)
+
+plotcons: plotcons.o
+	$(CC) plotcons.o -o plotcons $(LIBS)
+
+rndtrdst : rndtrdst.o
+	$(CC) rndtrdst.o -o rndtrdst $(LIBS)
+
+xmsf : xmsf.o
+	$(CC) $(CLFAGS) xmsf.o -o xmsf $(LIBS)
+
+counttrs : counttrs.o
+	$(CC) $(CLFAGS) counttrs.o -o counttrs $(LIBS)
+
+treechk : treechk.o
+	$(CC) $(CLFAGS) treechk.o -o treechk $(LIBS)
+
+rtrchk : rtrchk.o
+	$(CC) $(CLFAGS) rtrchk.o -o rtrchk $(LIBS)
+
+tree2dmt : tree2dmt.o
+	$(CC) $(CLFAGS) tree2dmt.o -o tree2dmt $(LIBS)
+
+distcorr : distcorr.o
+	$(CC) $(CLFAGS) distcorr.o -o distcorr $(LIBS)
+
+treecorr : treecorr.o
+	$(CC) $(CLFAGS) treecorr.o -o treecorr $(LIBS)
+
+treecomplex : treecomplex.o
+	$(CC) $(CLFAGS) treecomplex.o -o treecomplex $(LIBS)
+
+mutcheck : mutcheck.o
+	$(CC) $(CLFAGS) mutcheck.o -o mutcheck $(LIBS)
+
+clean :
+	rm -f $(TREETOOLS) *.o mdepend core
+
+mdepend :
+	$(CC) $(INCLUDE) -MM *.c > mdepend
+
+include mdepend
+
+% : %.o
+	$(CC) $*.o -o $* $(LIBS)
