@@ -1,7 +1,11 @@
 /*
- * $Id: plottree.c,v 1.2 2000/01/18 01:44:17 kim Exp $
+ * $Id: plottree.c,v 1.3 2000/01/20 01:29:36 kim Exp $
  *
  * $Log: plottree.c,v $
+ * Revision 1.3  2000/01/20 01:29:36  kim
+ * Added -T option to allow reading line thickness values from lengths of
+ * "bootstrap" tree. Very kludgy, no sanity checks(!!)
+ *
  * Revision 1.2  2000/01/18 01:44:17  kim
  * added CVS tags
  *
@@ -91,7 +95,7 @@ void write_pageheader(FILE *f, const char *text, long page_no, double page_width
   sprintf(buf, "%s, page %ld", text, page_no);
   fprintf(f, "gsave /Helvetica-Bold findfont 50 scalefont setfont\n");
   fprintf(f, "%f %f moveto %s show\n", left_margin, page_height - 50.0, ps_string(buf, ps_str));
-  strftime(buf, 250, "%d %b %y", localtime(&t));
+  strftime(buf, 250, "%d %b %Y", localtime(&t));
   fprintf(f, "%f %f %s showright\n", page_height - 50.0, left_margin + page_width, ps_string(buf, ps_str));
   fprintf(f, "0 setlinecap 10 setlinewidth newpath %f %f moveto %f %f lineto stroke grestore\n",
           left_margin, page_height - 70.0, left_margin + page_width, page_height - 70.0);
@@ -234,7 +238,7 @@ int main(int argc, char **argv)
   PHYLTREE phyltree, bootstrap_tree;
   PHYL_LEAFATTRIBUTE *attrlist = NULL;
   PHYL_PSINFO phyl_psinfo;
-  int unrooted_style = 0, print_leafnames = PHYL_LEAVES_HORIZONTAL, merge_code = MERGE_NONE, dotted_nodes = 0;
+  int unrooted_style = 0, print_leafnames = PHYL_LEAVES_HORIZONTAL, merge_code = MERGE_NONE, dotted_nodes = 0, bs_thickness_from_lengths = 0;
   int leafnames_at_max = 0, print_edgelengths = 0;
   char *infile_name = NULL, *outfile_name = NULL, *leafattrfile_name = NULL, *bootstrapfile_name = NULL;
   FILE *infile, *outfile, *leafattrfile, *bootstrapfile = NULL;
@@ -253,10 +257,13 @@ int main(int argc, char **argv)
   int oc;
   extern char *optarg;
 
-  while ((oc = getopt(argc, argv, "hue1rnkBdL:i:o:a:f:w:l:m:s:t:b:c:y:")) != -1)
+  while ((oc = getopt(argc, argv, "hue1rnkBdTL:i:o:a:f:w:l:m:s:t:b:c:y:")) != -1)
   {
     switch (oc)
     {
+    case 'T' :
+      bs_thickness_from_lengths = 1;
+      break;
     case 'L':
       legendline = append_legendline(legendline, optarg);
       break;
@@ -578,7 +585,10 @@ int main(int argc, char **argv)
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
           phyl_psinfo.attrlist = attrlist;
-          phyl_set_thickness(&phyltree, linewidth);
+	  if (!bs_thickness_from_lengths)
+	    phyl_set_thickness(&phyltree, linewidth);
+	  else
+	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_thickness(&phyltree));
           /* {
             PHYL_LEAFATTRIBUTE *atl = attrlist;
 
@@ -650,7 +660,11 @@ int main(int argc, char **argv)
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
           phyl_psinfo.attrlist = attrlist;
-          phyl_set_thickness(&phyltree, linewidth);
+	  if (!bs_thickness_from_lengths)
+	    phyl_set_thickness(&phyltree, linewidth);
+	  else
+	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_thickness(&phyltree));
+	  
 	  if (bootstrap_thick && bootstrapfile_name)
 	  {
 	    phyl_counter2thick(&phyltree, linewidth * 10.0 / phyl_psinfo.bootstrap_numtrees);
