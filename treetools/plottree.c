@@ -1,3 +1,12 @@
+/*
+ * $Id: plottree.c,v 1.2 2000/01/18 01:44:17 kim Exp $
+ *
+ * $Log: plottree.c,v $
+ * Revision 1.2  2000/01/18 01:44:17  kim
+ * added CVS tags
+ *
+ */
+
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
