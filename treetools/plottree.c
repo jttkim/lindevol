@@ -1,7 +1,11 @@
 /*
- * $Id: plottree.c,v 1.3 2000/01/20 01:29:36 kim Exp $
+ * $Id: plottree.c,v 1.4 2000/01/24 00:57:37 kim Exp $
  *
  * $Log: plottree.c,v $
+ * Revision 1.4  2000/01/24 00:57:37  kim
+ * adapted code for plotting edges with negative thickness in red, added
+ * some sanity checks.
+ *
  * Revision 1.3  2000/01/20 01:29:36  kim
  * Added -T option to allow reading line thickness values from lengths of
  * "bootstrap" tree. Very kludgy, no sanity checks(!!)
@@ -533,10 +537,18 @@ int main(int argc, char **argv)
                 phyl_psinfo.bootstrap_numtrees++;
                 if ((ret_code = phyl_topotreedist(&phyltree, &bootstrap_tree)) < 0)
                   fprintf(stderr, "Error %d in computation of topological tree distance\n", ret_code);
+		if (bs_thickness_from_lengths && (ret_code > 0))
+		  fprintf(stderr, "non-identical topologies in edge thickness setting\n");
               }
               phyl_free_tree(&bootstrap_tree);
             }
           }
+	  if (bs_thickness_from_lengths)
+	  {
+	    if (phyl_psinfo.bootstrap_numtrees != 1)
+	      fprintf(stderr, "read %ld trees from %s -- only last one sets edge thickness values\n", phyl_psinfo.bootstrap_numtrees, bootstrapfile_name);
+	    phyl_psinfo.bootstrap_numtrees = 0;
+	  }
         }
         if (eps)
         {
@@ -588,7 +600,7 @@ int main(int argc, char **argv)
 	  if (!bs_thickness_from_lengths)
 	    phyl_set_thickness(&phyltree, linewidth);
 	  else
-	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_thickness(&phyltree));
+	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
           /* {
             PHYL_LEAFATTRIBUTE *atl = attrlist;
 
@@ -663,7 +675,7 @@ int main(int argc, char **argv)
 	  if (!bs_thickness_from_lengths)
 	    phyl_set_thickness(&phyltree, linewidth);
 	  else
-	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_thickness(&phyltree));
+	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
 	  
 	  if (bootstrap_thick && bootstrapfile_name)
 	  {
