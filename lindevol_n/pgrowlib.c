@@ -1,6 +1,10 @@
-/* $Id: pgrowlib.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/* $Id: pgrowlib.c,v 1.3 2000/01/31 16:11:33 kim Exp $ */
 /*
  * $Log: pgrowlib.c,v $
+ * Revision 1.3  2000/01/31 16:11:33  kim
+ * Kludge-fixed parser bug introduced by organic_diffusion_rate by renaming
+ * parameter to diffusion_rate_organic.
+ *
  * Revision 1.2  2000/01/30 03:11:00  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -333,7 +337,7 @@ void nutrient_diffusion(void)
   {
     x = tmp_index[i] % world_width;
     y = tmp_index[i] / world_width;
-    if (world[x][y].organic_nutrient && (lnd_rnd() < organic_diffusion_rate))
+    if (world[x][y].organic_nutrient && (lnd_rnd() < diffusion_rate_organic))
     {
       r = lnd_random(8);
       xnew = (world_width + x + x_offset[r]) % world_width;

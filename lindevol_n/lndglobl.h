@@ -1,6 +1,10 @@
-/* $Id: lndglobl.h,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/* $Id: lndglobl.h,v 1.3 2000/01/31 16:11:32 kim Exp $ */
 /*
  * $Log: lndglobl.h,v $
+ * Revision 1.3  2000/01/31 16:11:32  kim
+ * Kludge-fixed parser bug introduced by organic_diffusion_rate by renaming
+ * parameter to diffusion_rate_organic.
+ *
  * Revision 1.2  2000/01/30 03:11:00  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -60,7 +64,7 @@ long nutrient_init;            /* initial amount of nutrient in the world */
 long nutrient_per_timestep;    /* newly generated nutrients per time step */
   
 double diffusion_rate;         /* probability of nutrient unit to diffuse per time step */
-double organic_diffusion_rate; /* diffusion rate for bound organic nutrient */
+double diffusion_rate_organic; /* diffusion rate for bound organic nutrient */
   
 double decomposition_rate;     /* probability of nutrient unit to move from organic to free state per time step */
 
@@ -186,7 +190,7 @@ extern long nutrient_init;            /* initial amount of nutrient in the world
 extern long nutrient_per_timestep;    /* newly generated nutrients per time step */
 
 extern double diffusion_rate;         /* probability of nutrient unit to diffuse per time step */
-extern double organic_diffusion_rate; /* diffusion rate for bound organic nutrient */
+extern double diffusion_rate_organic; /* diffusion rate for bound organic nutrient */
 extern double decomposition_rate;     /* probability of nutrient unit to move from organic to free state per time step */
 
 extern GSYS_PARAMETERS gsys_parameters;

@@ -1,6 +1,10 @@
-/* $Id: lnd6v01.c,v 1.2 2000/01/30 03:10:59 kim Exp $ */
+/* $Id: lnd6v01.c,v 1.3 2000/01/31 16:11:32 kim Exp $ */
 /*
  * $Log: lnd6v01.c,v $
+ * Revision 1.3  2000/01/31 16:11:32  kim
+ * Kludge-fixed parser bug introduced by organic_diffusion_rate by renaming
+ * parameter to diffusion_rate_organic.
+ *
  * Revision 1.2  2000/01/30 03:10:59  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -102,7 +106,7 @@ int get_control_parameters(void)
   nutrient_init = input_long("initial amount of nutrient in world: ");
   nutrient_per_timestep = input_long("additional nutrient per time step: ");
   diffusion_rate = input_dbl("diffusion rate: ");
-  organic_diffusion_rate = input_dbl("organic diffusion rate: ");
+  diffusion_rate_organic = input_dbl("organic diffusion rate: ");
   decomposition_rate = input_dbl("decomposition rate: ");
 
   gsys_parameters.num_divide = input_long("number of code bytes for divide: ");
@@ -153,7 +157,8 @@ int get_test_parameters(void)
   nutrient_init = 800;
   nutrient_per_timestep = 5;
   diffusion_rate = 1.0;
-  organic_diffusion_rate = 0.5;
+  diffusion_rate_organic = 0.5;
+  /* fprintf(stderr, "organic diffusion rate: %f\n", diffusion_rate_organic); */
   decomposition_rate = 1.0;
 
   gsys_parameters.num_divide = 32;
@@ -194,7 +199,10 @@ char *identify_parameter(const char *line, const char *pname)
   if (i == 0)
     return (NULL);
   else
+  {
+/*     fprintf(stderr, "identified: \"%s\" in \"%s\"\n", pname, line); */
     return (p + i);
+  }
 }
 
 
@@ -258,7 +266,8 @@ int interpret_parameter(const char *line)
   par_id_long("nutrient_init", nutrient_init);
   par_id_long("nutrient_per_timestep", nutrient_per_timestep);
   par_id_double("diffusion_rate", diffusion_rate);
-  par_id_double("organic_diffusion_rate", organic_diffusion_rate);
+  par_id_double("diffusion_rate_organic", diffusion_rate_organic);
+/*   fprintf(stderr, "parameter identified: organic diffusion rate: %f\n", diffusion_rate_organic); */
   par_id_double("decomposition_rate", decomposition_rate);
 
   par_id_long("num_divide", gsys_parameters.num_divide);

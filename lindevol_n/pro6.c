@@ -1,6 +1,10 @@
-/* $Id: pro6.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/* $Id: pro6.c,v 1.3 2000/01/31 16:11:33 kim Exp $ */
 /*
  * $Log: pro6.c,v $
+ * Revision 1.3  2000/01/31 16:11:33  kim
+ * Kludge-fixed parser bug introduced by organic_diffusion_rate by renaming
+ * parameter to diffusion_rate_organic.
+ *
  * Revision 1.2  2000/01/30 03:11:00  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -88,7 +92,7 @@ int open_pro_file(const char *mode)
     fprintf(pro_file, "NUTRIENT_INIT=%ld\n", nutrient_init);
     fprintf(pro_file, "NUTRIENT_PER_TIMESTEP=%ld\n", nutrient_per_timestep);
     fprintf(pro_file, "DIFFUSION_RATE=%f\n", diffusion_rate);
-    fprintf(pro_file, "ORGANIC_DIFFUSION_RATE=%f\n", organic_diffusion_rate);
+    fprintf(pro_file, "DIFFUSION_RATE_ORGANIC=%f\n", diffusion_rate_organic);
     fprintf(pro_file, "DECOMPOSITION_RATE=%f\n", decomposition_rate);
     fprintf(pro_file, "RANDOM_SEED=%ld\n", random_seed);
     fprintf(pro_file, "GSYS_CONF=d%ld f%ld l%ld -%ld +%ld et%ld nt%ld ef%ld nf%ld s%ld\n",

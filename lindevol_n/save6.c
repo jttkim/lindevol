@@ -1,6 +1,10 @@
-/* $Id: save6.c,v 1.2 2000/01/30 03:11:00 kim Exp $ */
+/* $Id: save6.c,v 1.3 2000/01/31 16:11:33 kim Exp $ */
 /*
  * $Log: save6.c,v $
+ * Revision 1.3  2000/01/31 16:11:33  kim
+ * Kludge-fixed parser bug introduced by organic_diffusion_rate by renaming
+ * parameter to diffusion_rate_organic.
+ *
  * Revision 1.2  2000/01/30 03:11:00  kim
  * Added cvs tags
  * Switched to urandom dependent lndrandm (this should be moved to a lib)
@@ -123,7 +127,7 @@ int write_named_savefile(const char *save_file_name)
   fprintf(f, "%ld\n", nutrient_init);
   fprintf(f, "%ld\n", nutrient_per_timestep);
   fprintf(f, "%1.12g\n", diffusion_rate);
-  fprintf(f, "%1.12g\n", organic_diffusion_rate);
+  fprintf(f, "%1.12g\n", diffusion_rate_organic);
   fprintf(f, "%1.12g\n", decomposition_rate);
   fprintf(f, "%1.12g\n", p_random_death);
   fprintf(f, "%1.12g\n", rdeath_f_energy);
@@ -241,7 +245,7 @@ int load_named_savefile(const char *save_file_name)
   fgets(buf, MAX_SLEN, f);
   diffusion_rate = strtod(buf, (char **) NULL);
   fgets(buf, MAX_SLEN, f);
-  organic_diffusion_rate = strtod(buf, (char **) NULL);
+  diffusion_rate_organic = strtod(buf, (char **) NULL);
   fgets(buf, MAX_SLEN, f);
   decomposition_rate = strtod(buf, (char **) NULL);
   fgets(buf, MAX_SLEN, f);

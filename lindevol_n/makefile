@@ -19,8 +19,10 @@ OPT 	= -Wall -g
 
 QTDIR	= /usr/local/qt
 QTLIBS	= -lqt
-QTINCLUDE = -I/usr/include/qt
-QTLIBDIR  = /usr/lib
+# QTINCLUDE = -I/usr/include/qt
+# QTLIBDIR  = /usr/lib
+QTCINCLUDE = -I$(QTDIR)/include
+QTLIBDIR = $(QTDIR)/lib
 
 include objects
 
@@ -29,7 +31,7 @@ JKINCL  = -I$(HOME)/include
 
 INCLUDE = $(JKINCL) $(QTINCLUDE)
 CFLAGS 	= $(OPT) $(DBGDEF) $(DEFINE) $(INCLUDE)
-LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L/usr/X11R6/lib
+LDFLAGS	= $(OPT) -L. -L$(HOME)/lib -L$(QTLIBDIR) -L/usr/lib/X11
 LIBS	= -llndlib $(JKLIBS) $(QTLIBS) $(STDLIBS)
 
 $(PRG) : $(OBJS) $(LNDLIBNAME)
