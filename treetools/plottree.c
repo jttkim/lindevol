@@ -1,7 +1,10 @@
 /*
- * $Id: plottree.c,v 1.4 2000/01/24 00:57:37 kim Exp $
+ * $Id: plottree.c,v 1.5 2000/01/28 18:07:31 kim Exp $
  *
  * $Log: plottree.c,v $
+ * Revision 1.5  2000/01/28 18:07:31  kim
+ * fixed divide by zero bug in thickness hack
+ *
  * Revision 1.4  2000/01/24 00:57:37  kim
  * adapted code for plotting edges with negative thickness in red, added
  * some sanity checks.
@@ -597,10 +600,10 @@ int main(int argc, char **argv)
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
           phyl_psinfo.attrlist = attrlist;
-	  if (!bs_thickness_from_lengths)
-	    phyl_set_thickness(&phyltree, linewidth);
-	  else
+	  if (bs_thickness_from_lengths && phyl_max_abs_thickness(&phyltree) > 0.0)
 	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
+	  else
+	    phyl_set_thickness(&phyltree, linewidth);
           /* {
             PHYL_LEAFATTRIBUTE *atl = attrlist;
 
@@ -672,10 +675,10 @@ int main(int argc, char **argv)
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
           phyl_psinfo.attrlist = attrlist;
-	  if (!bs_thickness_from_lengths)
-	    phyl_set_thickness(&phyltree, linewidth);
-	  else
+	  if (bs_thickness_from_lengths && phyl_max_abs_thickness(&phyltree) > 0.0)
 	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
+	  else
+	    phyl_set_thickness(&phyltree, linewidth);
 	  
 	  if (bootstrap_thick && bootstrapfile_name)
 	  {
