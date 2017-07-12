@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #ifdef __atarist__
@@ -266,11 +267,12 @@ int main(int argc, char **argv)
   double min_length, tree_height = -1.0;
   LEGENDLINE *legendline = NULL;
   double legend_fontheight = 42.0, legend_y0;
+  char *length_unit = "units";
 
   int oc;
   extern char *optarg;
 
-  while ((oc = getopt(argc, argv, "hue1rnkBdTL:i:o:a:f:w:l:m:s:t:b:c:y:")) != -1)
+  while ((oc = getopt(argc, argv, "hue1rnkBdTL:i:o:a:f:w:l:m:s:t:b:c:y:U:")) != -1)
   {
     switch (oc)
     {
@@ -369,6 +371,16 @@ int main(int argc, char **argv)
       break;
     case 'B':
       bootstrap_thick = 1;
+      break;
+    case 'U':
+      if (strlen(optarg) == 0)
+      {
+        length_unit = NULL;
+      }
+      else
+      {
+        length_unit = optarg;
+      }
       break;
     case 'h':
       printf("plottree -- programs to plot trees in PHYLIP format\n");
@@ -596,7 +608,7 @@ int main(int argc, char **argv)
           }
           else
             phyl_psinfo.angle_limit = 0.0;
-          phyl_psinfo.label = "units";
+          phyl_psinfo.label = length_unit;
           phyl_psinfo.tic_length = 20.0;
           phyl_psinfo.label_start = 0.0;
           phyl_psinfo.linewidth = linewidth;
@@ -725,4 +737,3 @@ int main(int argc, char **argv)
     fclose (outfile);
   return (EXIT_SUCCESS);
 }
-
