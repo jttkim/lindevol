@@ -252,7 +252,7 @@ int main(int argc, char **argv)
   PHYLTREE phyltree, bootstrap_tree;
   PHYL_LEAFATTRIBUTE *attrlist = NULL;
   PHYL_PSINFO phyl_psinfo;
-  int unrooted_style = 0, print_leafnames = PHYL_LEAVES_HORIZONTAL, merge_code = MERGE_NONE, dotted_nodes = 0, bs_thickness_from_lengths = 0;
+  int unrooted_style = 0, print_leafnames = PHYL_LEAVES_HORIZONTAL, merge_code = MERGE_NONE, dotted_nodes = 0, bs_thickness_from_lengths = 0, print_internal_names = 0;
   int leafnames_at_max = 0, print_edgelengths = 0;
   char *infile_name = NULL, *outfile_name = NULL, *leafattrfile_name = NULL, *bootstrapfile_name = NULL;
   FILE *infile, *outfile, *leafattrfile, *bootstrapfile = NULL;
@@ -272,10 +272,13 @@ int main(int argc, char **argv)
   int oc;
   extern char *optarg;
 
-  while ((oc = getopt(argc, argv, "hue1rnkBdTL:i:o:a:f:w:l:m:s:t:b:c:y:U:")) != -1)
+  while ((oc = getopt(argc, argv, "hue1rnkBdTIL:i:o:a:f:w:l:m:s:t:b:c:y:U:")) != -1)
   {
     switch (oc)
     {
+    case 'I':
+      print_internal_names = 1;
+      break;
     case 'T' :
       bs_thickness_from_lengths = 1;
       break;
@@ -492,7 +495,9 @@ int main(int argc, char **argv)
   else
   {
     if (!eps)
+    {
       postscript_init(outfile);
+    }
     while (!feof(infile))
     {
       if ((ret_code = phyl_read_tree(infile, &phyltree)) < 0)
@@ -501,6 +506,7 @@ int main(int argc, char **argv)
       }
       else if (phyltree.num_leaves > 0)  /* ignore "empty tree" at EOF */
       {
+        /* fprintf(stderr, "got tree with %ld leaves\n", phyltree.num_leaves); */
         switch (merge_code)
         {
         case MERGE_MAX:
@@ -575,9 +581,13 @@ int main(int argc, char **argv)
         {
           fprintf(outfile, "%%!PS-Adobe-3.0 EPSF-3.0\n");
           if (unrooted_style)
+          {
             fprintf(outfile, "%%%%BoundingBox: 0 0 432 432\n");
+          }
           else
+          {
             fprintf(outfile, "%%%%BoundingBox: 0 0 432 240\n");
+          }
           fprintf(outfile, "%%%%EndComments\n");
 	  postscript_init(outfile);
           phyl_psinfo.fontname = "Courier-Bold";
@@ -600,28 +610,38 @@ int main(int argc, char **argv)
             phyl_psinfo.angle_min = angle_min;
           }
           else
+          {
             phyl_psinfo.angle_min = 0.0;
+          }
           if (angle_limit > 0.0)
           {
             /* printf("angle_limit set to %f\n", angle_limit); */
             phyl_psinfo.angle_limit = angle_limit;
           }
           else
+          {
             phyl_psinfo.angle_limit = 0.0;
+          }
           phyl_psinfo.label = length_unit;
           phyl_psinfo.tic_length = 20.0;
           phyl_psinfo.label_start = 0.0;
           phyl_psinfo.linewidth = linewidth;
           phyl_psinfo.print_leafnames = print_leafnames;
           phyl_psinfo.dotted_nodes = dotted_nodes;
+          phyl_psinfo.print_internal_names = print_internal_names;
+          fprintf(stderr, "print_internal_names: %d\n", phyl_psinfo.print_internal_names);
 	  phyl_psinfo.tree_height = tree_height;
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
           phyl_psinfo.attrlist = attrlist;
 	  if (bs_thickness_from_lengths && phyl_max_abs_thickness(&phyltree) > 0.0)
+          {
 	    phyl_multiply_thick(&phyltree, 10.0 * linewidth / phyl_max_abs_thickness(&phyltree));
+          }
 	  else
+          {
 	    phyl_set_thickness(&phyltree, linewidth);
+          }
 	  if (bootstrap_thick && bootstrapfile_name)
 	  {
 	    phyl_counter2thick(&phyltree, linewidth * 10.0 / phyl_psinfo.bootstrap_numtrees);
@@ -638,9 +658,13 @@ int main(int argc, char **argv)
           } */
           fprintf(outfile, "72 300 div 72 300 div scale\n");
           if (unrooted_style)
+          {
             phyl_ps_utree(outfile, &phyltree, 0.0, 0.0, 1800.0, 1800.0, &phyl_psinfo);
+          }
           else
+          {
             phyl_pstree(outfile, &phyltree, 0.0, 0.0, 1800.0, 1000.0, &phyl_psinfo);
+          }
           fprintf(outfile, "%%%%EOF\n");
           phyl_free_tree(&phyltree);
           fprintf(stderr, "*** EPS file can hold only one tree ***\n");
@@ -687,13 +711,17 @@ int main(int argc, char **argv)
             phyl_psinfo.angle_limit = angle_limit;
           }
           else
+          {
             phyl_psinfo.angle_limit = 0.0;
+          }
           phyl_psinfo.label = "units";
           phyl_psinfo.tic_length = 20.0;
           phyl_psinfo.label_start = 0.0;
           phyl_psinfo.linewidth = linewidth;
           phyl_psinfo.print_leafnames = print_leafnames;
           phyl_psinfo.dotted_nodes = dotted_nodes;
+          phyl_psinfo.print_internal_names = print_internal_names;
+          fprintf(stderr, "print_internal_names: %d\n", phyl_psinfo.print_internal_names);
 	  phyl_psinfo.tree_height = tree_height;
 	  phyl_psinfo.print_edgelengths = print_edgelengths;
 	  phyl_psinfo.leafnames_at_max = leafnames_at_max;
